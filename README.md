@@ -1,6 +1,6 @@
 # Payments Engine
 
-A simple toy payments engine that processes transactions from a CSV file, handles deposits, withdrawals, disputes, resolutions, and chargebacks, then outputs client account states.
+A simple payments engine that processes transactions from a CSV file, handles deposits, withdrawals, disputes, resolutions, and chargebacks, then outputs client account states.
 
 ## Usage
 ```bash
@@ -8,7 +8,7 @@ cargo build --release
 cargo run -- transactions.csv > accounts.csv
 ```
 
-## Input Format
+## Expected Input Format
 CSV with columns: `type`, `client`, `tx`, `amount`
 
 ```csv
@@ -43,11 +43,14 @@ client,available,held,total,locked
 
 ### State Machine for Disputes
 
-Transactions follow a strict state machine:
+Transactions use the following state machine:
 
 ```
-Deposit -> Dispute --> Resolve
-                   |-> ChargeBack
+Deposit <—————|
+   |          |
+Dispute —> Resolve
+   |        
+ChargeBack
 ```
 
 - Only deposits can be disputed
@@ -68,13 +71,14 @@ Deposit -> Dispute --> Resolve
 - An account is locked after a chargeback occurs
 - Locked accounts reject all further transactions (deposits, withdrawals, disputes)
 
-## Assumptions
+## Rules
 1. **Transaction IDs are globally unique** - A deposit and withdrawal cannot share the same tx ID
 2. **Only deposits can be disputed** - Withdrawals are not stored and cannot be referenced by disputes
 3. **Disputes require sufficient available funds** - If a client has already withdrawn the disputed amount, the dispute still succeeds but only moves what's available to held
 4. **Client ID in dispute must match original transaction** - A client cannot dispute another client's transaction
 5. **Withdrawals on non-existent accounts are no-ops** - No error, but no account is created
 6. **Charged back transactions are removed** - They cannot be disputed again
+7. **After a resolution. A deposit can be disputed again** - Deposits may only have a single open dispute, but may be disputed several times.
 
 ## Testing
 Run unit tests:
