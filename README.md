@@ -42,7 +42,7 @@ client,available,held,total,locked
 | `resolve`    | Releases held funds back to available                                       |
 | `chargeback` | Reverses disputed transaction, locks account                                |
 
-## Design Decisions
+## The engine under the hood
 
 ### State Machine for Disputes
 
@@ -74,7 +74,7 @@ ChargeBack
 - An account is locked after a chargeback occurs
 - Locked accounts reject all further transactions (deposits, withdrawals, disputes)
 
-## Rules
+### Rules
 1. **Transaction IDs are globally unique** - A deposit and withdrawal cannot share the same tx ID
 2. **Only deposits can be disputed** - Withdrawals are not stored and cannot be referenced by disputes
 3. **Disputes require sufficient available funds** - If a client has already withdrawn the disputed amount, the dispute still succeeds but only moves what's available to held
