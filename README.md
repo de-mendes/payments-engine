@@ -42,7 +42,7 @@ client,available,held,total,locked
 | `resolve`    | Releases held funds back to available                                       |
 | `chargeback` | Reverses disputed transaction, locks account                                |
 
-## The engine under the hood
+## The Engine Under the Hood
 
 ### State Machine for Disputes
 
