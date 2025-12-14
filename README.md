@@ -2,6 +2,9 @@
 
 A simple payments engine that processes transactions from a CSV file, handles deposits, withdrawals, disputes, resolutions, and chargebacks, then outputs client account states.
 
+## Requirements
+Requires Rust `1.85+` (edition `2024`).
+
 ## Usage
 ```bash
 cargo build --release
@@ -92,16 +95,9 @@ Tests cover:
 - Account lock checking
 - Transaction transition handling (not found, wrong client, invalid state, success)
 
-Run with sample data:
+Run manually with sample data:
 ```bash
 cargo build --release
 cargo run -- transactions.csv > accounts.csv
 ```
-## Dependencies
-- `csv` - CSV parsing and writing
-- `rust_decimal` - Precise decimal arithmetic for financial calculations
-- `serde` - Serialization/deserialization
 
-## Rust Version
-
-Requires Rust `1.85+` (edition `2024`).
